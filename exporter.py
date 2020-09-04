@@ -40,7 +40,7 @@ def get_metrics_bmp280():
     pressure = bmp280.get_pressure()
     return temperature, pressure
 
-def send_metrics(result):
+def send_metrics(result,cfg):
     metric_name1 = cfg[sensor_metric_name] + "temperature"
     metric_name2 = cfg[sensor_metric_name] + "pressure"
     api.Metric.send(metric=metric_name1, points=result[0])
@@ -68,14 +68,14 @@ if __name__ == "__main__":
         cfg = open_configuration()
         datadog_init()
         event = {"title": "Launch script", "text": "The script has been launched"}
-        send_event(event)
+        send_event(event,cfg)
         event_error = ""
         while True:
             result = get_metrics_bmp280()
             log_values_in_stdout(result,cfg)
             try:
                 if event_error != "":
-                    send_event(event_error)
+                    send_event(event_error,cfg)
                     del event_error
                 send_metrics(result,cfg)
             except Exception as e:
