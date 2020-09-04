@@ -56,7 +56,7 @@ def sampling_interval_wait(cfg):
 def send_event(event,cfg):
     title = event["title"]
     text = event["text"]
-    tags = ["cfg[sensor_metric_name]", "application:python-iot"]
+    tags = [cfg["sensor_metric_name"], "application:python-iot"]
     api.Event.create(title=title, text=text, tags=tags)
     print("Event sent !")
 
