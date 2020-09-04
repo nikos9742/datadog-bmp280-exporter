@@ -58,6 +58,8 @@ def send_event(event):
     text = event["text"]
     tags = ["cfg[sensor_metric_name]", "application:python-iot"]
     api.Event.create(title=title, text=text, tags=tags)
+    print("Event sent !")
+
 
 if __name__ == "__main__":
     while True:
@@ -67,15 +69,17 @@ if __name__ == "__main__":
         datadog_init()
         event = {"title": "Launch script", "text": "The script has been launched"}
         send_event(event)
+        event_error = ""
         while True:
             result = get_metrics_bmp280()
             log_values_in_stdout(result)
             try:
-                if event_error:
+                if event_error != "":
                     send_event(event_error)
                     del event_error
                 send_metrics(result)
             except Exception as e:
                 event_error = {"title": "Error while sending metrics", "text": e}
+                print(event_error)
             sampling_interval_wait()
 
