@@ -4,7 +4,7 @@ import time
 from bmp280 import BMP280
 
 options = {
-    'api_key': '3354a41fe46dfccd02d4e3abf97ba020'
+    'api_key': ''
     ## EU costumers need to define 'api_host' as below
     #'api_host': 'https://api.datadoghq.eu/'
 }
