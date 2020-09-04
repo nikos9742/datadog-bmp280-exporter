@@ -46,8 +46,8 @@ def get_metrics_bmp280():
 def send_metrics(result,cfg):
     metric_name1 = cfg["sensor_metric_name"] + "." + "temperature"
     metric_name2 = cfg["sensor_metric_name"] + "." + "pressure"
-    api.Metric.send(metric=str(metric_name1), points=int(result[0]))
-    api.Metric.send(metric=str(metric_name2), points=int(result[1]))
+    api.Metric.send(metric=str(metric_name1), points=result[0])
+    api.Metric.send(metric=str(metric_name2), points=result[1])
     if cfg["log_values"] : print("Metrics sent ! " + metric_name1 + " " + metric_name2)
 
 def log_values_in_stdout(result,cfg):
