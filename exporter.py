@@ -25,6 +25,7 @@ def smbus_init():
 def open_configuration():
     with open("config.yml", "r") as ymlfile:
         cfg = yaml.load(ymlfile)
+    return cfg
 
 def datadog_init():
     options = {
@@ -62,7 +63,7 @@ if __name__ == "__main__":
     while True:
         launch_words()
         bmp280 = smbus_init()
-        open_configuration()
+        cfg = open_configuration()
         datadog_init()
         event = {"title": "Launch script", "text": "The script has been launched"}
         send_event(event)
