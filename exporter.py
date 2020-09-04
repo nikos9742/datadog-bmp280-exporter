@@ -1,38 +1,78 @@
 #!/usr/bin/env python3
-from datadog import initialize, api
 import time
+import yaml
+import logging
+from datadog import initialize, api
 from bmp280 import BMP280
-
-options = {
-    'api_key': ''
-    ## EU costumers need to define 'api_host' as below
-    #'api_host': 'https://api.datadoghq.eu/'
-}
-
-initialize(**options)
-
 try:
     from smbus2 import SMBus
 except ImportError:
     from smbus import SMBus
 
-print("""Datadog Exporter for temperature and pressure.
+def launch_words():
+    print("""Datadog Exporter for temperature and pressure.
 
-Press Ctrl+C to exit!
+    Press Ctrl+C to exit!
 
-""")
+    """)
 
-# Initialise the BMP280
-bus = SMBus(1)
-bmp280 = BMP280(i2c_dev=bus)
+def smbus_init():
+    # Initialise the BMP280
+    bus = SMBus(1)
+    bmp280 = BMP280(i2c_dev=bus)
 
-while True:
-    now = time.time()
-    future_10s = now + 10
+def open_configuration():
+    with open("config.yml", "r") as ymlfile:
+        cfg = yaml.load(ymlfile)
+
+def datadog_init():
+    options = {
+        'api_key': 'cfg["datadogkey"]'
+        ## EU costumers need to define 'api_host' as below
+        #'api_host': 'https://api.datadoghq.eu/'
+    }
+    initialize(**options)
+
+def get_metrics_bmp280():
     temperature = bmp280.get_temperature()
     pressure = bmp280.get_pressure()
-    api.Metric.send(metric='bureau.temperature', points=temperature)
-    api.Metric.send(metric='bureau.pressure', points=pressure)
-    print('{:05.2f}*C {:05.2f}hPa'.format(temperature, pressure))
+    return temperature, pressure
+
+def send_metrics(result):
+    metric_name1 = cfg[sensor_metric_name] + "temperature"
+    metric_name2 = cfg[sensor_metric_name] + "pressure"
+    api.Metric.send(metric=metric_name1, points=result[0])
+    api.Metric.send(metric=metric_name2, points=result[1])
     print("Metrics sent !")
-    time.sleep(30)
+
+def log_values_in_stdout(result):
+    print('{:05.2f}*C {:05.2f}hPa'.format(result[0], result[1]))
+
+def sampling_interval_wait():
+    time.sleep(int(cfg["sampling_interval"]))
+
+def send_event(event):
+    title = event["title"]
+    text = event["text"]
+    tags = ["cfg[sensor_metric_name]", "application:python-iot"]
+    api.Event.create(title=title, text=text, tags=tags)
+
+if __name__ == "__main__":
+    while True:
+        launch_words()
+        smbus_init()
+        open_configuration()
+        datadog_init()
+        event = {"title": "Launch script", "text": "The script has been launched"}
+        send_event(event)
+        While True:
+            result = get_metrics_bmp280()
+            try:
+                if event_error:
+                    send_event(event_error)
+                    del event_error
+                send_metrics(result)
+            except e:
+                event_error = {"title": "Error while sending metrics", "text": e}
+            sampling_interval_wait()
+
