@@ -59,13 +59,7 @@ if __name__ == "__main__":
     while True:
         launch_words()
         cfg = open_configuration()
-        options = {
-            'api_key': 'cfg["datadogkey"]'
-            ## EU costumers need to define 'api_host' as below
-            #'api_host': 'https://api.datadoghq.eu/'
-        }
-        initialize(**options)
-        print("Datadog Init ...")
+        datadog_init()
         event = {"title": "Launch script", "text": "The script has been launched"}
         send_event(event,cfg)
         event_error = ""

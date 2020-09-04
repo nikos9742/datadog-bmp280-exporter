@@ -29,7 +29,6 @@ def open_configuration():
         print("Configuration Init ...")
     return cfg
 
-
 def datadog_init():
     options = {
         'api_key': cfg["datadogkey"]
@@ -63,7 +62,6 @@ def send_event(event,cfg):
     tags = [cfg["sensor_metric_name"], "application:python-iot"]
     api.Event.create(title=title, text=text, tags=tags)
     print("Event sent !")
-
 
 if __name__ == "__main__":
     while True:
