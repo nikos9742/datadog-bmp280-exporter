@@ -1,0 +1,6 @@
+datadogkey: "YOUR KEY HERE"
+log_values: True
+log_errors: True
+sampling_interval: 30
+sensor_metric_name: "SENSOR NAME"
+application: WHATEVER
