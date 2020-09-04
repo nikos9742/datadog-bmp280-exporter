@@ -45,7 +45,7 @@ def send_metrics(result,cfg):
     metric_name2 = cfg["sensor_metric_name"] + "pressure"
     api.Metric.send(metric=metric_name1, points=result[0])
     api.Metric.send(metric=metric_name2, points=result[1])
-    if cfg["log_values"] : print("Metrics sent !")
+    if cfg["log_values"] : print("Metrics sent !" + metric_name1 + metric_name2)
 
 def log_values_in_stdout(result,cfg):
     if cfg["log_values"] : print('{:05.2f}*C {:05.2f}hPa'.format(result[0], result[1]))
