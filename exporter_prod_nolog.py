@@ -50,7 +50,7 @@ def send_metrics(result,cfg):
     api.Metric.send(metric=str(metric_name2), points=result[1])
     #if cfg["log_values"] : print("Metrics sent ! " + metric_name1 + " " + metric_name2)
 
-def log_values_in_stdout(result,cfg):
+#def log_values_in_stdout(result,cfg):
     #if cfg["log_values"] : print('{:05.2f}*C {:05.2f}hPa'.format(result[0], result[1]))
 
 def sampling_interval_wait(cfg):
