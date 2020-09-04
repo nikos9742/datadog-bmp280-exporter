@@ -25,8 +25,9 @@ def smbus_init():
 def open_configuration():
     with open("config.yml", "r") as ymlfile:
         cfg = yaml.load(ymlfile)
+        print("Configuration Init ...")
     return cfg
-    print("Configuration Init ...")
+
 
 def datadog_init():
     options = {
