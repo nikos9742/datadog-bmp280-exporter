@@ -26,6 +26,7 @@ def open_configuration():
     with open("config.yml", "r") as ymlfile:
         cfg = yaml.load(ymlfile)
     return cfg
+    print("Configuration Init ...")
 
 def datadog_init():
     options = {
@@ -34,6 +35,7 @@ def datadog_init():
         #'api_host': 'https://api.datadoghq.eu/'
     }
     initialize(**options)
+    print("Datadog Init ...")
 
 def get_metrics_bmp280():
     temperature = bmp280.get_temperature()
