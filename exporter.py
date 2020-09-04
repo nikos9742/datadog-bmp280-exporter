@@ -47,13 +47,13 @@ def send_metrics(result):
     api.Metric.send(metric=metric_name2, points=result[1])
     if cfg["log_values"] : print("Metrics sent !")
 
-def log_values_in_stdout(result):
+def log_values_in_stdout(result,cfg):
     if cfg["log_values"] : print('{:05.2f}*C {:05.2f}hPa'.format(result[0], result[1]))
 
-def sampling_interval_wait():
+def sampling_interval_wait(cfg):
     time.sleep(int(cfg["sampling_interval"]))
 
-def send_event(event):
+def send_event(event,cfg):
     title = event["title"]
     text = event["text"]
     tags = ["cfg[sensor_metric_name]", "application:python-iot"]
@@ -72,14 +72,14 @@ if __name__ == "__main__":
         event_error = ""
         while True:
             result = get_metrics_bmp280()
-            log_values_in_stdout(result)
+            log_values_in_stdout(result,cfg)
             try:
                 if event_error != "":
                     send_event(event_error)
                     del event_error
-                send_metrics(result)
+                send_metrics(result,cfg)
             except Exception as e:
                 event_error = {"title": "Error while sending metrics", "text": e}
                 print(event_error)
-            sampling_interval_wait()
+            sampling_interval_wait(cfg)
 
