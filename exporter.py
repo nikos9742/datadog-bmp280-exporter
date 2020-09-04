@@ -20,6 +20,7 @@ def smbus_init():
     # Initialise the BMP280
     bus = SMBus(1)
     bmp280 = BMP280(i2c_dev=bus)
+    return bmp280
 
 def open_configuration():
     with open("config.yml", "r") as ymlfile:
@@ -60,7 +61,7 @@ def send_event(event):
 if __name__ == "__main__":
     while True:
         launch_words()
-        smbus_init()
+        bmp280 = smbus_init()
         open_configuration()
         datadog_init()
         event = {"title": "Launch script", "text": "The script has been launched"}
