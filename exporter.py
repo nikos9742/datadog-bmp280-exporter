@@ -43,10 +43,10 @@ def send_metrics(result):
     metric_name2 = cfg[sensor_metric_name] + "pressure"
     api.Metric.send(metric=metric_name1, points=result[0])
     api.Metric.send(metric=metric_name2, points=result[1])
-    print("Metrics sent !")
+    if cfg["log_values"] : print("Metrics sent !")
 
 def log_values_in_stdout(result):
-    print('{:05.2f}*C {:05.2f}hPa'.format(result[0], result[1]))
+    if cfg["log_values"] : print('{:05.2f}*C {:05.2f}hPa'.format(result[0], result[1]))
 
 def sampling_interval_wait():
     time.sleep(int(cfg["sampling_interval"]))
@@ -65,8 +65,9 @@ if __name__ == "__main__":
         datadog_init()
         event = {"title": "Launch script", "text": "The script has been launched"}
         send_event(event)
-        While True:
+        while True:
             result = get_metrics_bmp280()
+            log_values_in_stdout(result)
             try:
                 if event_error:
                     send_event(event_error)
