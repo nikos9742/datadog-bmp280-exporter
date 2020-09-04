@@ -75,7 +75,7 @@ if __name__ == "__main__":
                     send_event(event_error)
                     del event_error
                 send_metrics(result)
-            except e:
+            except Exception as e:
                 event_error = {"title": "Error while sending metrics", "text": e}
             sampling_interval_wait()
 
