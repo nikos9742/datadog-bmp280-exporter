@@ -54,7 +54,7 @@ def send_metrics(result,cfg):
     if cfg["log_values"] : print("Metrics sent ! " + metric_name1 + " " + metric_name2 + " " + metric_name3)
 
 def log_values_in_stdout(result,cfg):
-    if cfg["log_values"] : print('{:05.2f}*C {:05.2f}hPa {:05.2f}%'.format(temperature, pressure, humidity))
+    if cfg["log_values"] : print('{:05.2f}*C {:05.2f}hPa {:05.2f}%'.format(result[0], result[1], result[2]))
 
 def sampling_interval_wait(cfg):
     time.sleep(int(cfg["sampling_interval"]))
